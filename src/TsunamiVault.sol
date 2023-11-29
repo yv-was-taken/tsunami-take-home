@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
+import { SafeTransferLib } from "solmate/src/utils/SafeTransferLib.sol";
+import { ERC20 } from "solmate/src/tokens/ERC20.sol";
+
 contract TsunamiVault {
 
     using SafeTransferLib for ERC20;
