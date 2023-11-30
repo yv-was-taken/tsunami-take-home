@@ -16,10 +16,8 @@
 - once foundry is installed and updated to latest version... install dependencies with `foundry install`
 
 ### how to run tests
-    ```
-    forge test
 
-    ```
+- run `forge test`
 
 if you would like to inspect the stack traces of the contract through each respective contract call, can match tests with `forge test --match-test {function name}` and specific level of verbosity with `-vvvv`
 
@@ -31,4 +29,3 @@ the test function names are structured so you can target specific behaviour if n
 PS: if you are having trouble getting foundry to run please check the installation instructions found [here](https://book.getfoundry.sh/getting-started/installation) for further assistance 
 
 
-that should be it, thanks for the opportunity!
