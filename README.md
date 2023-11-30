@@ -8,19 +8,12 @@
 
 ### getting started
 
-    - clone the repo to your local machine
+- clone the repo to your local machine
 
 -   make sure latest version of foundry is installed:
     -   if foundry is already installed: `foundryup`
-    -   if foundry is not installed:
-
-        ```
-        curl -L https://foundry.paradigm.xyz | bash
-    
-        ```
-- once foundry is installed...
-
-    - run `foundry install`
+    -   if foundry is not installed: `curl -L https://foundry.paradigm.xyz | bash`
+- once foundry is installed and updated to latest version... install dependencies with `foundry install`
 
 ### how to run tests
     ```
