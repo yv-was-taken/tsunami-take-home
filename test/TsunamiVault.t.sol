@@ -18,7 +18,6 @@ contract CustomCoin is ERC20 {
 contract TsunamiVaultTest is Test {
     event Deposit(address indexed user, address indexed _token, uint amount);
     event Withdraw(address indexed user, address indexed _token, uint amount);
-    event PauseUpdated(uint8 pauseStatus);
 
     error OnlyOwner();
     error Paused();
@@ -61,13 +60,13 @@ contract TsunamiVaultTest is Test {
         Vault.whitelistToken(address(Token1));
         assertEq(Vault.whitelist(address(Token1)), true);
     }
-    function test_whitelist_expect_token_not_whitelisted() public {
+    function test_whitelistTokens_expect_token_not_whitelisted() public {
         Vault.whitelistToken(address(Token2));
         assertEq(Vault.whitelist(address(Token1)), false);
 
     }
 
-    function test_whitelist_revert_tokens_NonAdmin() public {
+    function test_whitelistTokens_revert_tokens_OnlyOwner() public {
         vm.startPrank(actor1);
         vm.expectRevert(OnlyOwner.selector);
         Vault.whitelistToken(address(Token1));
@@ -75,26 +74,26 @@ contract TsunamiVaultTest is Test {
 
     }
 
-    function test_pause_PauseContract_success() public {
+    function test_pauseContract_pause_success() public {
         uint8 expectedPauseStatus = 1;
         Vault.pauseContract();
         assertEq(Vault.pause(), expectedPauseStatus);
 
     }
-    function test_pause_UnpauseContract_success() public {
+    function test_pauseContract_unpause_success() public {
         uint8 expectedPauseStatus = 0;
         Vault.pauseContract();
         Vault.unpauseContract();
         assertEq(Vault.pause(), expectedPauseStatus);
 
     }
-    function test_revert_PauseContract_NonAdmin() public {
+    function test_pauseContract_revert_pause_OnlyOwner() public {
         vm.startPrank(actor1);
         vm.expectRevert(OnlyOwner.selector);
         Vault.pauseContract();
 
     }
-    function test_revert_UnpauseContract_NonAdmin() public {
+    function test_pauseContract_revert_unpause_OnlyOwner() public {
         vm.startPrank(actor1);
         vm.expectRevert(OnlyOwner.selector);
         Vault.unpauseContract();
