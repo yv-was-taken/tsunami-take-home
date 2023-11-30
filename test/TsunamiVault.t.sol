@@ -151,6 +151,7 @@ contract TsunamiVaultTest is Test {
         assertEq(userVaultBalanceToken2, depositAmountToken2);
     }
 
+
     function test_deposit_revert_Paused() public {
         Vault.whitelistToken(address(Token1));
         Vault.pauseContract();
@@ -180,9 +181,21 @@ contract TsunamiVaultTest is Test {
 
 
     }
+    function testFail_deposit_revert_InsufficientFunds() public {
+        //actor1 balance is 50
+        //expected revert error should come from SafeTransferLib
+        uint depositAmount = 100;
+        Vault.whitelistToken(address(Token1));
+        vm.startPrank(actor1);
+        Token1.approve(address(Vault), depositAmount);
+        Vault.deposit(address(Token1), depositAmount);
+
+
+
+    }
+
     function test_withdraw_success_execution() public {
         uint depositAmount = 10;
-
         Vault.whitelistToken(address(Token1));
         vm.startPrank(actor1);
         Token1.approve(address(Vault), depositAmount);
@@ -190,7 +203,7 @@ contract TsunamiVaultTest is Test {
         vm.expectEmit(true, true, true, false);
         emit Withdraw(actor1, address(Token1), depositAmount);
         Vault.withdraw(address(Token1), depositAmount);
-        
+
 
     }
     function test_withdraw_success_balances_updated_as_expected() public {
@@ -224,7 +237,57 @@ contract TsunamiVaultTest is Test {
         Vault.deposit(address(Token1), depositAmount);
         vm.expectRevert(AmountZero.selector);
         Vault.withdraw(address(Token1), 0);
-        
+
+    }
+    function test_withdraw_revert_InsufficientFunds() public {
+        uint depositAmount = 10;
+        Vault.whitelistToken(address(Token1));
+        vm.startPrank(actor1);
+        Token1.approve(address(Vault), depositAmount);
+        Vault.deposit(address(Token1), depositAmount);
+        vm.expectRevert(InsufficientFunds.selector);
+        Vault.withdraw(address(Token1), depositAmount + 1);
+
+    }
+
+    function test_deposit_withdraw_success_multiple_actors_depositing_and_withdrawing() public {
+        uint depositAmount = 10;
+
+        Vault.whitelistToken(address(Token1));
+
+        //deposit token 1 for actor 1 and 2
+        vm.startPrank(actor1);
+        Token1.approve(address(Vault), depositAmount);
+        Vault.deposit(address(Token1), depositAmount);
+        vm.stopPrank();
+        vm.startPrank(actor2);
+        Token1.approve(address(Vault), depositAmount);
+        Vault.deposit(address(Token1), depositAmount);
+        vm.stopPrank();
+
+        //withdraw token 1 for actor1
+        vm.startPrank(actor1);
+        Vault.withdraw(address(Token1), depositAmount);
+        vm.stopPrank();
+
+
+        //check balances
+        uint actor1Balance = Vault.userBalance(actor1, address(Token1));
+        assertEq(actor1Balance, 0);
+        uint actor2Balance = Vault.userBalance(actor2, address(Token1));
+        assertEq(actor2Balance, depositAmount);
+
+
+        //withdraw token1 for actor2
+        vm.startPrank(actor2);
+        Vault.withdraw(address(Token1), depositAmount);
+        vm.stopPrank();
+
+        //check balances
+        actor2Balance = Vault.userBalance(actor2, address(Token1));
+        assertEq(actor2Balance, 0);
+        actor1Balance = Vault.userBalance(actor1, address(Token1));
+        assertEq(actor1Balance, 0);
     }
 
 }
