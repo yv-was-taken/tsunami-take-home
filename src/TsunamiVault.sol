@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import { SafeTransferLib } from "solmate/src/utils/SafeTransferLib.sol";
-import { ERC20 } from "solmate/src/tokens/ERC20.sol";
+import { SafeTransferLib } from "solmate/utils/SafeTransferLib.sol";
+import { ERC20 } from "solmate/tokens/ERC20.sol";
 
 contract TsunamiVault {
 
@@ -11,7 +11,6 @@ contract TsunamiVault {
 
     event Deposit(address indexed user, address indexed _token, uint amount);
     event Withdraw(address indexed user, address indexed _token, uint amount);
-    event PauseUpdated(uint8 pauseStatus);
 
     error OnlyOwner();
     error Paused();
@@ -23,23 +22,21 @@ contract TsunamiVault {
 
     address public owner;
     mapping(address => bool) public whitelist;
-    mapping(address => address => uint) public userBalance;
-    uint8 pause = 0;
+    mapping(address => mapping(address => uint)) public userBalance;
+    uint8 public pause = 0;
     constructor() {
         owner = msg.sender;
 
     }
 
-    function pause() public {
+    function pauseContract() public {
         if (msg.sender != owner) revert OnlyOwner();
         pause = 1;
-        emit PauseUpdated(pause);
     }
 
-    function unpause() public {
+    function unpauseContract() public {
         if (msg.sender != owner) revert OnlyOwner();
         pause = 0;
-        emit PauseUpdated(pause);
     }
 
     function whitelistToken(address _token) public {
@@ -62,7 +59,7 @@ contract TsunamiVault {
         if (_amount > userBalance[msg.sender][_token]) revert InsufficientFunds();
         ERC20(_token).safeTransfer(msg.sender, _amount);
         userBalance[msg.sender][_token] -= _amount;
-        emit Withdraw(msg.sender, _token, amount);
+        emit Withdraw(msg.sender, _token, _amount);
     }
 
 }
