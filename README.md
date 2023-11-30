@@ -1,66 +1,32 @@
-## Foundry
+# Tsunami Vault take home tests
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+### repo structure
 
-Foundry consists of:
+-   vault source code found under `src/TsunamiVault.sol`
+-   tests to be found under `test/TsunamiVault.t.sol`
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### how to run tests
 
-## Documentation
+-   make sure latest version of foundry is installed:
+    -   if foundry is already installed: `foundryup`
+    -   if foundry is not installed:
 
-https://book.getfoundry.sh/
+        ```
+        curl -L https://foundry.paradigm.xyz | bash
+    
+        ```
+- once foundry is installed...
+    ```
+    forge test
 
-## Usage
+    ```
 
-### Build
+if you would like to inspect the stack traces of the contract through each respective contract call, can match tests with `forge test --match-test {function name}` and specific level of verbosity with `-vvvv`
 
-```shell
-$ forge build
-```
+ex: inspect stack traces for deposit(). `forge test --match-test test_deposit -vvvv`
 
-### Test
 
-```shell
-$ forge test
-```
+PS: if you are having trouble getting foundry to run please check the installation instructions found [here](https://book.getfoundry.sh/getting-started/installation) for further assistance 
 
-### Format
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+that should be it, thanks for the opportunity!
