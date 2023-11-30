@@ -5,7 +5,10 @@
 -   vault source code found under `src/TsunamiVault.sol`
 -   tests to be found under `test/TsunamiVault.t.sol`
 
-### how to run tests
+
+### getting started
+
+    - clone the repo to your local machine
 
 -   make sure latest version of foundry is installed:
     -   if foundry is already installed: `foundryup`
@@ -16,6 +19,10 @@
     
         ```
 - once foundry is installed...
+
+    - run `foundry install`
+
+### how to run tests
     ```
     forge test
 
